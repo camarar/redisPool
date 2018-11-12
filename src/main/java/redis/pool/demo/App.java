@@ -48,7 +48,22 @@ public class App
 	        // Get the client list, useful to see if connection list is growing...
 	        System.out.println( "\nCache Command  : CLIENT LIST" );
 	        System.out.println( "Cache Response : " + jedis.clientList());
+	        
+	        
+	        // Simple set with expiration
+	        System.out.println( "\nCache Command  : SET Message Expire" );
+	        System.out.println( "Cache Response : " + jedis.setex("MessageExpire", 10, "Hello! The cache is working from Java with expire!"));
+	        
+	     // Simple get and put of integral data types into the cache
+	        System.out.println( "\nCache Command  : GET Message Expire" );
+	        System.out.println( "Cache Response : " + jedis.get("MessageExpire"));
+	        
+	        Thread.sleep(11000);
+	        System.out.println( "\n Wait 11s..." );
         	
+	     // Simple get and put of integral data types into the cache
+	        System.out.println( "\nCache Command  : GET Message Expire" );
+	        System.out.println( "Cache Response : " + jedis.get("MessageExpire"));
 			
 		} catch (JedisConnectionException ex) {
 			System.out.println( "Erro Jedis Connection: " + ex );
