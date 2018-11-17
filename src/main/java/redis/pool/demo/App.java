@@ -2,6 +2,8 @@ package redis.pool.demo;
 
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -13,19 +15,25 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 public class App 
 {
-    public static void main( String[] args )
+	final static Logger logger = Logger.getLogger(App.class);
+	
+    public static void main( String[] args )	
     {
+    	
         System.out.println( "Hello World!" );
+        
+        logger.info("Hello World!");
         
         JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
         Jedis jedis = null;
         
         try  {
         	jedis = pool.getResource();
+        	logger.debug("Get resource from pool.");
         	jedis.set("foo", "bar");
         	String foobar = jedis.get("foo");
         	
-        	System.out.println("Get Redis: " + foobar);
+        	System.out.println("Get Redis: " + foobar);	
         	
 			jedis.zadd("sose", 0, "car"); jedis.zadd("sose", 0, "bike"); 
 			Set<String> sose = jedis.zrange("sose", 0, -1);
@@ -64,18 +72,28 @@ public class App
 	     // Simple get and put of integral data types into the cache
 	        System.out.println( "\nCache Command  : GET Message Expire" );
 	        System.out.println( "Cache Response : " + jedis.get("MessageExpire"));
+	        
+	        logger.debug("Redis clients: " + jedis.clientList());
+	        logger.debug("Redis is connected: " + jedis.isConnected());
+	        
 			
 		} catch (JedisConnectionException ex) {
 			System.out.println( "Erro Jedis Connection: " + ex );
+			logger.debug("Erro Jedis Connection: " + ex);
 		} catch (Exception ex) {
 			System.out.println( "Erro: " + ex );
+			logger.debug("Erro: " + ex );
 		} finally {
 			if (jedis != null) {
 			    jedis.close();
+			    logger.debug("Close jedis client.");
 			}
+			logger.debug("Jedis client is null[" + (jedis == null) + "].");
+
 		}
         
-		pool.close();
+        pool.close();
+        logger.info("Close connection pool.");
         
         
     }
