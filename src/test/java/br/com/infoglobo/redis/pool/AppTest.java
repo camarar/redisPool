@@ -1,4 +1,4 @@
-package redis.pool.demo;
+package br.com.infoglobo.redis.pool;
 
 import static org.junit.Assert.assertTrue;
 
